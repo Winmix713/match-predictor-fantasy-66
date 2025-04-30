@@ -4,105 +4,121 @@ import { Clock, User, Flag, Play, ArrowDownUp, AlertCircle } from 'lucide-react'
 import type { Match } from '@/types/football';
 
 /**
- * Meccs esemény típusok
+ * Match event types
  */
 export type EventType = 'goal' | 'yellow-card' | 'red-card' | 'substitution' | 'start' | 'half-time' | 'end';
 
 /**
- * Meccs esemény interfész
+ * Match event interface
  */
 export interface MatchEvent {
-  id: string;                // Egyedi azonosító
-  time: number;              // Esemény ideje percben
-  type: EventType;           // Esemény típusa
-  team: 'home' | 'away';     // Melyik csapathoz tartozik
-  player?: string;           // Érintett játékos
-  assistedBy?: string;       // Gólpasszt adó játékos
-  playerOut?: string;        // Lecserélt játékos
-  playerIn?: string;         // Becserélt játékos
-  description?: string;      // Esemény leírása
+  id: string;                // Unique identifier
+  time: number;              // Event time in minutes
+  type: EventType;           // Event type
+  team: 'home' | 'away';     // Which team the event belongs to
+  player?: string;           // Involved player
+  assistedBy?: string;       // Player who provided the assist
+  playerOut?: string;        // Player substituted out
+  playerIn?: string;         // Player substituted in
+  description?: string;      // Event description
 }
 
 /**
- * MatchTimeline komponens tulajdonságai
+ * MatchTimeline component properties
  */
 export interface MatchTimelineProps {
-  match: Match;              // Meccs adatok
-  events: MatchEvent[];      // Meccs események
-  className?: string;        // CSS osztályok
+  match: Match;              // Match data
+  events: MatchEvent[];      // Match events
+  className?: string;        // CSS classes
 }
 
 /**
- * Meccs idővonal komponens
+ * Match Timeline component
  * 
- * Megjeleníti egy futball meccs eseményeit időrendi sorrendben
+ * Displays a football match events in chronological order
  */
 export const MatchTimeline: React.FC<MatchTimelineProps> = ({ 
   match, 
   events, 
   className = ''
 }) => {
-  // Rendezzük az eseményeket idő szerint
+  // Sort events by time
   const sortedEvents = React.useMemo(() => 
     [...events].sort((a, b) => a.time - b.time), 
     [events]
   );
 
   return (
-    <div className={`bg-black/40 backdrop-blur-lg rounded-xl border border-white/10 p-6 shadow-lg ${className}`}>
-      <h3 className="text-xl font-semibold text-white mb-4">Match Timeline</h3>
+    <section 
+      className={`bg-black/40 backdrop-blur-lg rounded-xl border border-white/10 p-6 shadow-lg ${className}`}
+      aria-labelledby="match-timeline-heading"
+    >
+      <h3 id="match-timeline-heading" className="text-xl font-semibold text-white mb-4">Match Timeline</h3>
       
-      {/* Meccs eredmény fejléc */}
+      {/* Match result header */}
       <MatchHeader match={match} />
       
-      {/* Idővonal események */}
-      <div className="relative">
-        <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-700 z-0"></div>
-        <div className="space-y-6">
+      {/* Timeline events */}
+      <div className="relative mt-8">
+        <div 
+          className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-700 z-0" 
+          role="presentation"
+          aria-hidden="true"
+        ></div>
+        <ul className="space-y-6 list-none" role="list" aria-label="Match events">
           {sortedEvents.map((event) => (
             <TimelineEvent key={event.id} event={event} />
           ))}
-        </div>
+        </ul>
       </div>
-    </div>
+    </section>
   );
 };
 
 /**
- * Meccs fejléc komponens
+ * Match header component
  */
 const MatchHeader: React.FC<{ match: Match }> = ({ match }) => {
   return (
-    <div className="flex items-center gap-4 mb-6">
+    <div className="flex items-center gap-4 mb-6 justify-center">
       <TeamDisplay 
         logo={match.homeTeam.logo} 
         name={match.homeTeam.name} 
+        teamType="home"
       />
       
       <ScoreDisplay 
         homeScore={match.homeScore} 
         awayScore={match.awayScore} 
+        homeTeam={match.homeTeam.name}
+        awayTeam={match.awayTeam.name}
       />
       
       <TeamDisplay 
         logo={match.awayTeam.logo} 
-        name={match.awayTeam.name} 
+        name={match.awayTeam.name}
+        teamType="away" 
       />
     </div>
   );
 };
 
 /**
- * Csapat megjelenítés komponens
+ * Team display component
  */
-const TeamDisplay: React.FC<{ logo?: string; name: string }> = ({ logo, name }) => {
+const TeamDisplay: React.FC<{ 
+  logo?: string; 
+  name: string;
+  teamType: 'home' | 'away';
+}> = ({ logo, name, teamType }) => {
   return (
-    <div className="flex items-center">
+    <div className="flex items-center" aria-label={`${teamType === 'home' ? 'Home' : 'Away'} team: ${name}`}>
       {logo && (
         <img 
           src={logo} 
           alt={`${name} logo`} 
-          className="w-10 h-10 object-contain mr-2" 
+          className="w-10 h-10 object-contain mr-2"
+          loading="lazy"
         />
       )}
       <span className="text-white font-medium">{name}</span>
@@ -111,110 +127,177 @@ const TeamDisplay: React.FC<{ logo?: string; name: string }> = ({ logo, name }) 
 };
 
 /**
- * Eredmény megjelenítés komponens
+ * Score display component
  */
-const ScoreDisplay: React.FC<{ homeScore?: number; awayScore?: number }> = ({ 
+const ScoreDisplay: React.FC<{ 
+  homeScore?: number; 
+  awayScore?: number;
+  homeTeam: string;
+  awayTeam: string;
+}> = ({ 
   homeScore, 
-  awayScore 
+  awayScore,
+  homeTeam,
+  awayTeam
 }) => {
+  const scoreText = `${homeScore !== undefined ? homeScore : '?'} - ${awayScore !== undefined ? awayScore : '?'}`;
+  
   return (
-    <div className="px-3 py-1 bg-black/30 rounded-lg">
+    <div 
+      className="px-4 py-2 bg-black/30 rounded-lg text-center mx-2 min-w-[80px]"
+      aria-label={`Score: ${homeTeam} ${scoreText} ${awayTeam}`}
+    >
       <span className="text-white font-bold text-lg">
-        {homeScore !== undefined ? homeScore : '?'} - {awayScore !== undefined ? awayScore : '?'}
+        {scoreText}
       </span>
     </div>
   );
 };
 
 /**
- * Idővonal esemény komponens
+ * Timeline event component
  */
 const TimelineEvent: React.FC<{ event: MatchEvent }> = ({ event }) => {
+  const teamSide = event.team === 'home' ? 'Home team' : 'Away team';
+  const eventLabel = getEventTypeLabel(event.type);
+  
   return (
-    <div className="relative flex items-start pl-12">
+    <li className="relative flex items-start pl-12 animate-fade-in" role="listitem">
       <div className="absolute left-0 top-0 z-10">
         <EventIcon event={event} />
       </div>
       <div className="min-w-[40px] mr-4 font-mono">
-        <span className="text-gray-400">{event.time}'</span>
+        <time dateTime={`PT${event.time}M`} className="text-gray-400">
+          {event.time}'
+        </time>
       </div>
-      <div className="flex-1 bg-black/30 rounded-lg p-3">
-        <EventContent event={event} />
+      <div className="flex-1 bg-black/30 rounded-lg p-3 transform transition-all hover:translate-x-1 hover:bg-black/40">
+        <EventContent event={event} teamSide={teamSide} eventLabel={eventLabel} />
       </div>
-    </div>
+    </li>
   );
 };
 
+// Helper function to get readable event type labels
+const getEventTypeLabel = (type: EventType): string => {
+  switch (type) {
+    case 'goal': return 'Goal';
+    case 'yellow-card': return 'Yellow Card';
+    case 'red-card': return 'Red Card';
+    case 'substitution': return 'Substitution';
+    case 'start': return 'Match Start';
+    case 'half-time': return 'Half Time';
+    case 'end': return 'Match End';
+    default: return 'Event';
+  }
+};
+
 /**
- * Esemény ikon komponens
+ * Event icon component
  */
 const EventIcon: React.FC<{ event: MatchEvent }> = ({ event }) => {
+  const eventLabel = getEventTypeLabel(event.type);
+  
   switch (event.type) {
     case 'goal':
       return (
-        <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
+        <div 
+          className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center"
+          aria-label={eventLabel}
+        >
           <span className="text-white text-sm">⚽</span>
         </div>
       );
     case 'yellow-card':
       return (
-        <div className="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center">
+        <div 
+          className="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center"
+          aria-label={eventLabel}
+        >
           <div className="w-4 h-6 bg-yellow-400"></div>
         </div>
       );
     case 'red-card':
       return (
-        <div className="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center">
+        <div 
+          className="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center"
+          aria-label={eventLabel}
+        >
           <div className="w-4 h-6 bg-red-600"></div>
         </div>
       );
     case 'substitution':
       return (
-        <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center">
-          <ArrowDownUp className="w-4 h-4 text-white" />
+        <div 
+          className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center"
+          aria-label={eventLabel}
+        >
+          <ArrowDownUp className="w-4 h-4 text-white" aria-hidden="true" />
         </div>
       );
     case 'start':
       return (
-        <div className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center">
-          <Play className="w-4 h-4 text-white" />
+        <div 
+          className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center"
+          aria-label={eventLabel}
+        >
+          <Play className="w-4 h-4 text-white" aria-hidden="true" />
         </div>
       );
     case 'half-time':
       return (
-        <div className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center">
-          <Clock className="w-4 h-4 text-white" />
+        <div 
+          className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center"
+          aria-label={eventLabel}
+        >
+          <Clock className="w-4 h-4 text-white" aria-hidden="true" />
         </div>
       );
     case 'end':
       return (
-        <div className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center">
-          <Flag className="w-4 h-4 text-white" />
+        <div 
+          className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center"
+          aria-label={eventLabel}
+        >
+          <Flag className="w-4 h-4 text-white" aria-hidden="true" />
         </div>
       );
     default:
       return (
-        <div className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center">
-          <AlertCircle className="w-4 h-4 text-white" />
+        <div 
+          className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center"
+          aria-label="Other event"
+        >
+          <AlertCircle className="w-4 h-4 text-white" aria-hidden="true" />
         </div>
       );
   }
 };
 
 /**
- * Esemény tartalom komponens
+ * Event content component
  */
-const EventContent: React.FC<{ event: MatchEvent }> = ({ event }) => {
+const EventContent: React.FC<{ 
+  event: MatchEvent;
+  teamSide: string;
+  eventLabel: string;
+}> = ({ 
+  event, 
+  teamSide,
+  eventLabel 
+}) => {
   switch (event.type) {
     case 'goal':
       return (
         <div className="flex flex-col">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2" aria-label={`${teamSide} Goal by ${event.player}`}>
             <span className="text-green-400 font-medium">⚽ GOAL!</span>
             <span className="text-white">{event.player}</span>
           </div>
           {event.assistedBy && (
-            <span className="text-gray-400 text-sm">Assisted by {event.assistedBy}</span>
+            <span className="text-gray-400 text-sm" aria-label={`Assisted by ${event.assistedBy}`}>
+              Assisted by {event.assistedBy}
+            </span>
           )}
           {event.description && (
             <p className="text-gray-400 text-sm mt-1">{event.description}</p>
@@ -224,7 +307,7 @@ const EventContent: React.FC<{ event: MatchEvent }> = ({ event }) => {
     case 'yellow-card':
       return (
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2" aria-label={`${teamSide} Yellow Card for ${event.player}`}>
             <span className="text-yellow-400 font-medium">Yellow Card</span>
             <span className="text-white">{event.player}</span>
           </div>
@@ -236,7 +319,7 @@ const EventContent: React.FC<{ event: MatchEvent }> = ({ event }) => {
     case 'red-card':
       return (
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2" aria-label={`${teamSide} Red Card for ${event.player}`}>
             <span className="text-red-500 font-medium">Red Card</span>
             <span className="text-white">{event.player}</span>
           </div>
@@ -247,9 +330,9 @@ const EventContent: React.FC<{ event: MatchEvent }> = ({ event }) => {
       );
     case 'substitution':
       return (
-        <div>
+        <div aria-label={`${teamSide} Substitution: ${event.playerOut} out, ${event.playerIn} in`}>
           <span className="text-blue-400 font-medium">Substitution</span>
-          <div className="flex items-center gap-1 text-sm">
+          <div className="flex items-center gap-1 text-sm mt-1">
             <span className="text-red-400">↑ {event.playerOut}</span>
             <span className="text-white mx-1">→</span>
             <span className="text-green-400">↓ {event.playerIn}</span>
@@ -260,7 +343,7 @@ const EventContent: React.FC<{ event: MatchEvent }> = ({ event }) => {
     case 'half-time':
     case 'end':
       return (
-        <div>
+        <div aria-label={`${eventLabel}: ${event.description || ''}`}>
           <span className="text-gray-300 font-medium">
             {event.type === 'start' ? 'Match Started' : 
              event.type === 'half-time' ? 'Half Time' : 'Match Ended'}
