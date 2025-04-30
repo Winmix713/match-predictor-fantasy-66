@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { Clock, User, Flag, Play, ArrowDownUp } from 'lucide-react';
+import { Clock, User, Flag, Play, ArrowDownUp, AlertCircle } from 'lucide-react';
 import type { Match } from '@/types/football';
 
 /**
@@ -194,7 +195,7 @@ const EventIcon: React.FC<{ event: MatchEvent }> = ({ event }) => {
     default:
       return (
         <div className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center">
-          <User className="w-4 h-4 text-white" />
+          <AlertCircle className="w-4 h-4 text-white" />
         </div>
       );
   }
