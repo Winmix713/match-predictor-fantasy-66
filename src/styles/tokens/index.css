@@ -2,6 +2,8 @@
 @import './colors.css';
 @import './typography.css';
 @import './spacing.css';
+@import './shadows.css';
+@import './breakpoints.css';
 
 /* Additional global styles */
 body {
@@ -10,13 +12,13 @@ body {
   background-color: var(--color-surface-primary);
 }
 
-/* Class utilities */
+/* Class utilities based on Once UI */
 .once-card {
   background: var(--color-surface-secondary);
   border: 1px solid var(--color-border-default);
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-md);
 }
 
 .once-card-header {

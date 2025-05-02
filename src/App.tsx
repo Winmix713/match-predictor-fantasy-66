@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -17,40 +16,46 @@ import DashboardPage from "./features/dashboard/DashboardPage";
 import TeamsPage from "./features/teams/TeamsPage";
 import AnalyticsPage from "./features/analytics/AnalyticsPage";
 import FootballAnalytics from "./pages/FootballAnalytics";
+import { OnceThemeProvider } from "./components/once-theme-provider";
+
+// Import the tokens CSS to make them available globally
+import "./styles/tokens/index.css";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          {/* Dashboard as home page */}
-          <Route path="/" element={<MainLayout><DashboardPage /></MainLayout>} />
-          
-          {/* Existing pages with MainLayout */}
-          <Route path="/matches" element={<MainLayout><Matches /></MainLayout>} />
-          <Route path="/advanced-pattern" element={<MainLayout><AdvancedPattern /></MainLayout>} />
-          <Route path="/analysis" element={<MainLayout><Analysis /></MainLayout>} />
-          <Route path="/league" element={<MainLayout><League /></MainLayout>} />
-          <Route path="/league-management" element={<MainLayout><LeagueManagement /></MainLayout>} />
-          
-          {/* New pages */}
-          <Route path="/teams" element={<MainLayout><TeamsPage /></MainLayout>} />
-          <Route path="/analytics" element={<MainLayout><AnalyticsPage /></MainLayout>} />
-          <Route path="/football-analytics" element={<MainLayout><FootballAnalytics /></MainLayout>} />
-          
-          {/* Development pages */}
-          <Route path="/brandbook" element={<Brandbook />} />
-          <Route path="/components" element={<Index />} />
-          
-          {/* Catch-all */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <OnceThemeProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            {/* Dashboard as home page */}
+            <Route path="/" element={<MainLayout><DashboardPage /></MainLayout>} />
+            
+            {/* Existing pages with MainLayout */}
+            <Route path="/matches" element={<MainLayout><Matches /></MainLayout>} />
+            <Route path="/advanced-pattern" element={<MainLayout><AdvancedPattern /></MainLayout>} />
+            <Route path="/analysis" element={<MainLayout><Analysis /></MainLayout>} />
+            <Route path="/league" element={<MainLayout><League /></MainLayout>} />
+            <Route path="/league-management" element={<MainLayout><LeagueManagement /></MainLayout>} />
+            
+            {/* New pages */}
+            <Route path="/teams" element={<MainLayout><TeamsPage /></MainLayout>} />
+            <Route path="/analytics" element={<MainLayout><AnalyticsPage /></MainLayout>} />
+            <Route path="/football-analytics" element={<MainLayout><FootballAnalytics /></MainLayout>} />
+            
+            {/* Development pages */}
+            <Route path="/brandbook" element={<Brandbook />} />
+            <Route path="/components" element={<Index />} />
+            
+            {/* Catch-all */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </OnceThemeProvider>
   </QueryClientProvider>
 );
 

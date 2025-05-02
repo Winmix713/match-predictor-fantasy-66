@@ -1,0 +1,17 @@
+
+:root {
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+}
+
+/* Media query helpers (for reference) */
+/* 
+@media (min-width: var(--breakpoint-sm)) { ... } 
+@media (min-width: var(--breakpoint-md)) { ... }
+@media (min-width: var(--breakpoint-lg)) { ... }
+@media (min-width: var(--breakpoint-xl)) { ... }
+@media (min-width: var(--breakpoint-2xl)) { ... }
+*/

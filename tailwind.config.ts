@@ -76,12 +76,61 @@ export default {
           purple: "#9c27b0",
           teal: "#20c997",
           indigo: "#6610f2"
+        },
+        // Once UI specific colors
+        'brand-primary': 'var(--color-brand-primary)',
+        'brand-primary-light': 'var(--color-brand-primary-light)',
+        'brand-primary-dark': 'var(--color-brand-primary-dark)',
+        neutral: {
+          100: 'var(--color-neutral-100)',
+          200: 'var(--color-neutral-200)',
+          300: 'var(--color-neutral-300)',
+          400: 'var(--color-neutral-400)',
+          500: 'var(--color-neutral-500)',
+          600: 'var(--color-neutral-600)',
+          700: 'var(--color-neutral-700)',
+          800: 'var(--color-neutral-800)',
+          900: 'var(--color-neutral-900)',
         }
+      },
+      spacing: {
+        'once-xs': 'var(--spacing-xs)',
+        'once-sm': 'var(--spacing-sm)',
+        'once-md': 'var(--spacing-md)',
+        'once-lg': 'var(--spacing-lg)',
+        'once-xl': 'var(--spacing-xl)',
+        'once-2xl': 'var(--spacing-2xl)',
+        'once-3xl': 'var(--spacing-3xl)',
+      },
+      fontSize: {
+        'once-xs': 'var(--font-size-xs)',
+        'once-sm': 'var(--font-size-sm)',
+        'once-md': 'var(--font-size-md)',
+        'once-lg': 'var(--font-size-lg)',
+        'once-xl': 'var(--font-size-xl)',
+        'once-2xl': 'var(--font-size-2xl)',
+        'once-3xl': 'var(--font-size-3xl)',
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        'once-sm': 'var(--radius-sm)',
+        'once-md': 'var(--radius-md)',
+        'once-lg': 'var(--radius-lg)',
+        'once-xl': 'var(--radius-xl)',
+        'once-full': 'var(--radius-full)',
+      },
+      boxShadow: {
+        'once-sm': 'var(--shadow-sm)',
+        'once-md': 'var(--shadow-md)',
+        'once-lg': 'var(--shadow-lg)',
+        'once-xl': 'var(--shadow-xl)',
+        'once-2xl': 'var(--shadow-2xl)',
+        'once-inner': 'var(--shadow-inner)',
+      },
+      fontFamily: {
+        'once-primary': 'var(--font-family-primary)',
       },
       keyframes: {
         "accordion-down": {
