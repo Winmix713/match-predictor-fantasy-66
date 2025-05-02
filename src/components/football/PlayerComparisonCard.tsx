@@ -1,6 +1,8 @@
+
 import React from 'react';
 import type { Player } from '@/types/football';
 import { RadarChart } from './RadarChart';
+import '@/styles/tokens/index.css';
 
 interface PlayerComparisonCardProps {
   player1: Player;
@@ -37,7 +39,7 @@ export const PlayerComparisonCard: React.FC<PlayerComparisonCardProps> = ({
     team: {
       id: player1.id,
       name: player1.name,
-      color: player1.team?.color || '#ff3d41',
+      color: player1.team?.color || '#4285F4', // Using Once UI primary color as default
     },
     stats: {
       pace: stats.player1Stats.pace,
@@ -62,7 +64,7 @@ export const PlayerComparisonCard: React.FC<PlayerComparisonCardProps> = ({
     team: {
       id: player2.id,
       name: player2.name,
-      color: player2.team?.color || '#1E3A8A',
+      color: player2.team?.color || '#2A1A45', // Using Once UI dark color as default
     },
     stats: {
       pace: stats.player2Stats.pace,
@@ -84,13 +86,19 @@ export const PlayerComparisonCard: React.FC<PlayerComparisonCardProps> = ({
   };
 
   return (
-    <div className="bg-black/40 backdrop-blur-lg rounded-xl border border-white/10 p-6 shadow-lg">
-      <h3 className="text-xl font-bold text-white mb-6 text-center">Player Comparison</h3>
+    <div 
+      className="once-card backdrop-blur-lg"
+      style={{
+        background: 'linear-gradient(135deg, rgba(42, 26, 69, 0.85) 0%, rgba(64, 58, 80, 0.9) 100%)',
+        boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(255, 255, 255, 0.1) inset',
+      }}
+    >
+      <h3 className="once-card-title text-center mb-6">Player Comparison</h3>
       
       <div className="grid grid-cols-3 gap-4 mb-8">
         {/* Player 1 */}
         <div className="flex flex-col items-center">
-          <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-white mb-3">
+          <div className="w-20 h-20 once-avatar mb-3">
             {player1.image ? (
               <img 
                 src={player1.image} 
@@ -100,7 +108,11 @@ export const PlayerComparisonCard: React.FC<PlayerComparisonCardProps> = ({
             ) : (
               <div 
                 className="w-full h-full flex items-center justify-center"
-                style={{ backgroundColor: player1.team?.color || '#ff3d41' }}
+                style={{ 
+                  backgroundColor: player1.team?.color || 'var(--color-brand-primary)',
+                  fontSize: 'var(--font-size-xl)',
+                  fontWeight: 'var(--font-weight-bold)'
+                }}
               >
                 {player1.name.substring(0, 1)}
               </div>
@@ -115,10 +127,13 @@ export const PlayerComparisonCard: React.FC<PlayerComparisonCardProps> = ({
                 className="w-4 h-4 object-contain" 
               />
             )}
-            <span className="text-gray-400 text-sm">{player1.team?.name}</span>
+            <span className="text-neutral-300 text-sm">{player1.team?.name}</span>
           </div>
-          <div className="mt-3 bg-black/30 px-3 py-1 rounded-full">
-            <span className="text-lg font-bold" style={{ color: player1.team?.color || '#ff3d41' }}>
+          <div className="once-badge mt-3" style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
+            <span 
+              className="text-lg font-bold" 
+              style={{ color: player1.team?.color || 'var(--color-brand-primary)' }}
+            >
               {stats.player1Stats.rating.toFixed(1)}
             </span>
           </div>
@@ -126,14 +141,14 @@ export const PlayerComparisonCard: React.FC<PlayerComparisonCardProps> = ({
         
         {/* VS */}
         <div className="flex items-center justify-center">
-          <div className="w-16 h-16 rounded-full bg-black/50 flex items-center justify-center border border-white/20">
+          <div className="vs-badge">
             <span className="text-white font-bold text-lg">VS</span>
           </div>
         </div>
         
         {/* Player 2 */}
         <div className="flex flex-col items-center">
-          <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-white mb-3">
+          <div className="w-20 h-20 once-avatar mb-3">
             {player2.image ? (
               <img 
                 src={player2.image} 
@@ -143,7 +158,11 @@ export const PlayerComparisonCard: React.FC<PlayerComparisonCardProps> = ({
             ) : (
               <div 
                 className="w-full h-full flex items-center justify-center"
-                style={{ backgroundColor: player2.team?.color || '#1E3A8A' }}
+                style={{ 
+                  backgroundColor: player2.team?.color || 'var(--color-brand-primary-dark)',
+                  fontSize: 'var(--font-size-xl)',
+                  fontWeight: 'var(--font-weight-bold)'
+                }}
               >
                 {player2.name.substring(0, 1)}
               </div>
@@ -158,10 +177,13 @@ export const PlayerComparisonCard: React.FC<PlayerComparisonCardProps> = ({
                 className="w-4 h-4 object-contain" 
               />
             )}
-            <span className="text-gray-400 text-sm">{player2.team?.name}</span>
+            <span className="text-neutral-300 text-sm">{player2.team?.name}</span>
           </div>
-          <div className="mt-3 bg-black/30 px-3 py-1 rounded-full">
-            <span className="text-lg font-bold" style={{ color: player2.team?.color || '#1E3A8A' }}>
+          <div className="once-badge mt-3" style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
+            <span 
+              className="text-lg font-bold" 
+              style={{ color: player2.team?.color || 'var(--color-brand-primary-dark)' }}
+            >
               {stats.player2Stats.rating.toFixed(1)}
             </span>
           </div>
@@ -170,11 +192,19 @@ export const PlayerComparisonCard: React.FC<PlayerComparisonCardProps> = ({
       
       {/* Radar Chart */}
       <div className="flex justify-center">
-        <RadarChart 
-          performance1={player1Performance}
-          performance2={player2Performance}
-          size={300}
-        />
+        <div 
+          className="bg-black/30 rounded-xl p-4 backdrop-blur-sm"
+          style={{
+            borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2) inset'
+          }}
+        >
+          <RadarChart 
+            performance1={player1Performance}
+            performance2={player2Performance}
+            size={300}
+          />
+        </div>
       </div>
     </div>
   );

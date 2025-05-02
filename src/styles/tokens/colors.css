@@ -1,0 +1,37 @@
+
+:root {
+  /* Primary brand colors */
+  --color-brand-primary: #4285F4;
+  --color-brand-primary-light: #A5C8FF;
+  --color-brand-primary-dark: #2A1A45;
+  
+  /* Neutral colors */
+  --color-neutral-100: #FFFFFF;
+  --color-neutral-200: #F8F9FA;
+  --color-neutral-300: #DEE1E6;
+  --color-neutral-400: #BDC1C9;
+  --color-neutral-500: #9AA0AE;
+  --color-neutral-600: #7B7682;
+  --color-neutral-700: #5F5B69;
+  --color-neutral-800: #403A50;
+  --color-neutral-900: #2A1A45;
+  
+  /* Semantic colors */
+  --color-text-primary: var(--color-neutral-100);
+  --color-text-secondary: var(--color-neutral-300);
+  --color-text-tertiary: var(--color-neutral-500);
+  
+  --color-surface-primary: var(--color-neutral-900);
+  --color-surface-secondary: var(--color-neutral-800);
+  --color-surface-tertiary: var(--color-neutral-700);
+  
+  --color-border-default: var(--color-neutral-700);
+  --color-border-focus: var(--color-brand-primary);
+  
+  /* Team colors preserved from the original system */
+  --color-team-red: #ff3d41;
+  --color-team-blue: #2196f3;
+  --color-team-yellow: #FFD700;
+  --color-team-green: #4caf50;
+  --color-team-purple: #9C27B0;
+}
