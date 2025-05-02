@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -16,6 +17,9 @@ import DashboardPage from "./features/dashboard/DashboardPage";
 import TeamsPage from "./features/teams/TeamsPage";
 import AnalyticsPage from "./features/analytics/AnalyticsPage";
 import FootballAnalytics from "./pages/FootballAnalytics";
+import PlayerTransfers from "./pages/PlayerTransfers";
+import PlayerAuctions from "./pages/PlayerAuctions";
+import Tournaments from "./pages/Tournaments";
 import { OnceThemeProvider } from "./components/once-theme-provider";
 
 // Import the tokens CSS to make them available globally
@@ -45,6 +49,9 @@ const App = () => (
             <Route path="/teams" element={<MainLayout><TeamsPage /></MainLayout>} />
             <Route path="/analytics" element={<MainLayout><AnalyticsPage /></MainLayout>} />
             <Route path="/football-analytics" element={<MainLayout><FootballAnalytics /></MainLayout>} />
+            <Route path="/transfers" element={<MainLayout><PlayerTransfers /></MainLayout>} />
+            <Route path="/auctions" element={<MainLayout><PlayerAuctions /></MainLayout>} />
+            <Route path="/tournaments" element={<MainLayout><Tournaments /></MainLayout>} />
             
             {/* Development pages */}
             <Route path="/brandbook" element={<Brandbook />} />
